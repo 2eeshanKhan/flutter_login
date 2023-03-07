@@ -37,8 +37,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_core: ^2.7.0
   firebase_auth: ^4.2.9
-  shared_preferences:
-  get: ^3.15.0
+  # shared_preferences:
+  shared_preferences: ^2.0.18
+  fluttertoast: ^8.2.1
+  
 
 dev_dependencies:
   flutter_test:

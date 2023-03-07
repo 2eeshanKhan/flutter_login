@@ -152,14 +152,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  get:
+  fluttertoast:
     dependency: "direct main"
     description:
-      name: get
-      sha256: e476dffba6f181fd7f48e9785fe000923392644ecd2b10365b631eef440ee833
+      name: fluttertoast
+      sha256: "2f9c4d3f4836421f7067a28f8939814597b27614e021da9d63e5d3fb6e212d25"
       url: "https://pub.dev"
     source: hosted
-    version: "3.26.0"
+    version: "8.2.1"
   http_parser:
     dependency: transitive
     description:

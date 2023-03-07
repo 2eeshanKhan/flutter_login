@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_catalog/reusable_widgets/reusable_widget.dart';
+import 'package:flutter_catalog/screens/forgot_password.dart';
 import 'package:flutter_catalog/screens/home_screen.dart';
 import 'package:flutter_catalog/screens/signup_screen.dart';
+import 'package:flutter_catalog/screens/splash_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/color_utils.dart';
 
@@ -39,7 +42,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 SizedBox(
                   height: 30,
                 ),
-                reusableTextField("Enter Your UserName", Icons.person_outline,
+                reusableTextField("Enter Your Email", Icons.person_outline,
                     false, _emailTextController),
                 SizedBox(
                   height: 20,
@@ -49,7 +52,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 SizedBox(
                   height: 20,
                 ),
-                signInSignUpButton(context, true, () {
+                signInSignUpButton(context, true, () async {
+                  var sharedPref = await SharedPreferences.getInstance();
+                  sharedPref.setBool(SplashScreenState.keyLogin, true);
                   FirebaseAuth.instance
                       .signInWithEmailAndPassword(
                           email: _emailTextController.text,
@@ -59,7 +64,8 @@ class _SignInScreenState extends State<SignInScreen> {
                         MaterialPageRoute(builder: (context) => HomeScreen()));
                   });
                 }),
-                signUpOption()
+                signUpOption(),
+                forgetPass()
               ],
             ),
           ),
@@ -81,6 +87,28 @@ class _SignInScreenState extends State<SignInScreen> {
           },
           child: const Text(
             "Sign Up",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    );
+  }
+
+  Row forgetPass() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text("Forget Password",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ForgotPasswordScreen()));
+          },
+          child: const Text(
+            "??",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         )

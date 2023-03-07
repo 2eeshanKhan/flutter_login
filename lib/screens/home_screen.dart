@@ -12,6 +12,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +21,12 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ElevatedButton(
           child: Text("Log Out"),
           onPressed: () {
-            FirebaseAuth.instance.signOut().then((value) => {
+            /*  FirebaseAuth.instance.signOut().then((value) => {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SignInScreen()))
+                });
+                */
+            _auth.signOut().then((value) => {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => SignInScreen()))
                 });
