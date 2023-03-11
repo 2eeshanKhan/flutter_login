@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
 
   TextEditingController _userNameTextController = TextEditingController();
   TextEditingController _phoneTextController = TextEditingController();
-  //TextEditingController _emailTextController = TextEditingController();
+  TextEditingController _emailTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,8 +96,8 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                           height: 170,
                                           fit: BoxFit.cover,
                                         )
-                                      : Image.network(
-                                          'https://en.wikipedia.org/wiki/ZooZoo#/media/File:Zoozoo-vodafone-1.jpg',
+                                      : Image.asset(
+                                          "assets/images/profilepic.png",
                                           width: 170,
                                           height: 170,
                                           fit: BoxFit.cover,
@@ -137,7 +138,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                       height: 20,
                     ),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         String id = DateTime.now().millisecond.toString();
 
                         firebase_storage.Reference ref = firebase_storage
@@ -147,22 +148,23 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
 
                         firebase_storage.UploadTask uploadTask =
                             ref.putFile(pickedImage!.absolute);
-                        var newUrl = ref.getDownloadURL();
-                        Future.value(uploadTask).then((value) async {
-                          await fireStore.doc(id).set({
-                            'id': id,
-                            'name': _userNameTextController.text.toString(),
-                            'phone': _phoneTextController.text.toString(),
-                            'email': email,
-                            'image ': newUrl.toString()
-                          }).then((value) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SignInScreen()));
-                          }).onError((error, stackTrace) {
-                            service.error(context, error);
-                          });
+
+                        var newUrl =
+                            await (await uploadTask).ref.getDownloadURL();
+
+                        await fireStore.doc(id).set({
+                          'id': id,
+                          'name': _userNameTextController.text.toString(),
+                          'phone': _phoneTextController.text.toString(),
+                          'email': service.getEmail(),
+                          'image ': newUrl.toString()
+                        }).then((value) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SignInScreen()));
+                        }).onError((error, stackTrace) {
+                          service.error(context, error);
                         });
                       },
                       child: Text(
@@ -172,19 +174,6 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                             fontWeight: FontWeight.bold,
                             fontSize: 16),
                       ),
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.resolveWith((states) {
-                            if (states.contains(MaterialState.pressed)) {
-                              return Colors.black26;
-                            }
-                            return Colors.white;
-                          }),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(30)))),
                     )
                   ],
                 ),

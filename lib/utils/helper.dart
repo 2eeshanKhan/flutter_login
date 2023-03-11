@@ -50,4 +50,10 @@ class Service {
           );
         });
   }
+
+  String? getEmail() {
+    User? user = auth.currentUser;
+    String? email = user?.email;
+    return email;
+  }
 }

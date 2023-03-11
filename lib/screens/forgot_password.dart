@@ -58,17 +58,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     }).onError((error, stackTrace) {});
                   },
                   child: Text('Forgot Password'),
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.resolveWith((states) {
-                        if (states.contains(MaterialState.pressed)) {
-                          return Colors.black26;
-                        }
-                        return Colors.white;
-                      }),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30)))),
                 )
               ],
             ),
