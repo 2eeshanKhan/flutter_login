@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../screens/signin_screen.dart';
+import '../screens/userinfo_screen.dart';
 
 class Service {
   final auth = FirebaseAuth.instance;
@@ -13,7 +14,7 @@ class Service {
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) => {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SignInScreen()))
+                    MaterialPageRoute(builder: (context) => UserInfoScreen()))
               });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {

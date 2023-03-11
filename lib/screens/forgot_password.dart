@@ -47,17 +47,29 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   height: 20,
                 ),
                 ElevatedButton(
-                    onPressed: () {
-                      auth
-                          .sendPasswordResetEmail(
-                              email: _emailTextController.text.toString())
-                          .then((value) {
-                        Fluttertoast.showToast(
-                            msg:
-                                'We have sent you an email to recover password,please check your email');
-                      }).onError((error, stackTrace) {});
-                    },
-                    child: Text('Forgot Password'))
+                  onPressed: () {
+                    auth
+                        .sendPasswordResetEmail(
+                            email: _emailTextController.text.toString())
+                        .then((value) {
+                      Fluttertoast.showToast(
+                          msg:
+                              'We have sent you an email to recover password,please check your email');
+                    }).onError((error, stackTrace) {});
+                  },
+                  child: Text('Forgot Password'),
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.resolveWith((states) {
+                        if (states.contains(MaterialState.pressed)) {
+                          return Colors.black26;
+                        }
+                        return Colors.white;
+                      }),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)))),
+                )
               ],
             ),
           ),
