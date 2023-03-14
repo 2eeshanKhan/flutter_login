@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_catalog/reusable_widgets/reusable_widget.dart';
 import 'package:flutter_catalog/screens/forgot_password.dart';
 import 'package:flutter_catalog/screens/home_screen.dart';
+import 'package:flutter_catalog/screens/profile_screen.dart';
 import 'package:flutter_catalog/screens/signup_screen.dart';
 import 'package:flutter_catalog/screens/splash_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/helper.dart';
-
+import 'package:google_sign_in/google_sign_in.dart';
 import '../utils/color_utils.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -21,6 +22,8 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
   Service service = Service();
 
   TextEditingController _passwordTextController = TextEditingController();
@@ -74,14 +77,32 @@ class _SignInScreenState extends State<SignInScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => HomeScreen()));
+                              builder: (context) => ProfileScreen()));
                     });
                   } else {
                     service.error(context, "Field must not be empty");
                   }
                 }),
                 signUpOption(),
-                forgetPass()
+                forgetPass(),
+                MaterialButton(
+                  onPressed: () {
+                    _googleSignIn.signIn().then((value) {
+                      String name = value!.displayName!;
+                      String image = value!.photoUrl!;
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfileScreen()));
+                    });
+                  },
+                  color: Colors.blueAccent,
+                  height: 50,
+                  child: const Text(
+                    'Google SignIn',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                )
               ],
             ),
           ),

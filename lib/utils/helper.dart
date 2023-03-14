@@ -1,12 +1,27 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../screens/signin_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_catalog/utils/userModel.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+
 import '../screens/userinfo_screen.dart';
 
-class Service {
+class Service extends GetxController {
+  String name = '';
+  String email = '';
+  String phone = '';
+  String image = '';
+  final firebaseInstance = FirebaseFirestore.instance;
+  Map userProfileData = {'name': '', 'email': '', 'phone': '', 'image': ''};
   final auth = FirebaseAuth.instance;
+
+  void onReady() {
+    super.onReady();
+    getUserProfileData();
+  }
 
   createUser(email, password, context) async {
     try {
@@ -56,4 +71,73 @@ class Service {
     String? email = user?.email;
     return email;
   }
+
+  User? getCurrentUser() {
+    User? user = auth.currentUser;
+    return user;
+  }
+
+  Future<void> getUserProfileData() async {
+    // print("user id ${authController.userId}");
+    try {
+      var response = await firebaseInstance
+          .collection('UserInfo')
+          .where('uniqueId', isEqualTo: getEmail())
+          .get();
+
+      // response.docs.forEach((result) {
+      //   print(result.data());
+      // });
+      if (response.docs.length > 0) {
+        userProfileData['name'] = response.docs[0]['name'];
+        userProfileData['email'] = response.docs[0]['email'];
+        userProfileData['phone'] = response.docs[0]['phone'];
+        userProfileData['image'] = response.docs[0]['image'];
+      }
+      print(userProfileData);
+    } on FirebaseException catch (e) {
+      print(e);
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  //List<UserDetail> loginUserData = [];
+
+  /* Future<void> getUserProfileData() async {
+    print("loginUserData is $loginUserData");
+    loginUserData = [];
+    try {
+     // CommanDialog.showLoading();
+      final List<UserDetail> userLoadedData = [];
+      var response = await firebaseInstance
+          .collection('UserInfo')
+          .where('email', isEqualTo: getCurrentUser())
+          .get();
+
+      if (response.docs.length > 0) {
+        response.docs.forEach(
+          (result) {
+            print(result.data());
+            userLoadedData.add(UserDetail(
+              name: result['name'],
+              phone: result['phone'],
+              email: result['email'],
+              image: result['image']
+            ));
+          },
+        );
+      }
+      loginUserData.addAll(userLoadedData);
+     // update();
+     
+    } on FirebaseException catch (e) {
+    
+      print("Error $e");
+    } catch (error) {
+     
+      print("error $error");
+    }
+  }
+  */
 }

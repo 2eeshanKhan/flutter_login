@@ -1,10 +1,8 @@
 import 'dart:async';
-// ignore: avoid_web_libraries_in_flutter
-//import 'dart:js';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_catalog/screens/profile_screen.dart';
+
 import 'package:flutter_catalog/screens/signin_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -53,7 +51,7 @@ class SplashScreenState extends State<SplashScreen> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => HomeScreen(),
+                builder: (context) => SignInScreen(),
               ));
         } else {
           Navigator.pushReplacement(

@@ -31,6 +31,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   String name = '';
   String email = '';
   String phone = '';
+  String image = '';
 
   File? pickedImage;
 
@@ -152,11 +153,15 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                         var newUrl =
                             await (await uploadTask).ref.getDownloadURL();
 
-                        await fireStore.doc(id).set({
-                          'id': id,
+                        String? uniqueId = service.getEmail();
+
+                        await fireStore.doc(uniqueId).set({
+                          'uniqueId': service.getEmail(),
                           'name': _userNameTextController.text.toString(),
                           'phone': _phoneTextController.text.toString(),
                           'email': service.getEmail(),
+                          'dateOfJoining':
+                              DateTime.now().millisecond.toString(),
                           'image ': newUrl.toString()
                         }).then((value) {
                           Navigator.push(

@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_catalog/screens/home_screen.dart';
 import 'package:flutter_catalog/screens/signin_screen.dart';
 import 'package:flutter_catalog/screens/splash_screen.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const SplashScreen(),
+      home: const HomeScreen(),
     );
   }
 }
