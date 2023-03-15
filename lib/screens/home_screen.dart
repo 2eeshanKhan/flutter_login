@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_catalog/screens/signin_screen.dart';
 import 'package:flutter_catalog/utils/helper.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,7 +24,10 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Center(
         child: ElevatedButton(
           child: Text("Log Out"),
-          onPressed: () {
+          onPressed: () async {
+            SharedPreferences pref = await SharedPreferences.getInstance();
+            await pref.clear();
+
             _auth.signOut().then((value) => {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => SignInScreen()))

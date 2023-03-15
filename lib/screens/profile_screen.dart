@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_catalog/screens/signin_screen.dart';
+import 'package:flutter_catalog/screens/splash_screen.dart';
 import 'package:get/get.dart';
 import 'package:flutter_catalog/utils/helper.dart';
 import 'package:flutter_catalog/utils/userModel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -30,10 +32,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Stack(
         children: <Widget>[
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 gradient: LinearGradient(colors: [
-              const Color(0xFF26CBE6),
-              const Color(0xFF26CBC0),
+              Color(0xFF26CBE6),
+              Color(0xFF26CBC0),
             ], begin: Alignment.topCenter, end: Alignment.center)),
           ),
           Scaffold(
@@ -66,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           Text(
                             'Welcome ${controller.userProfileData['name']}',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 18.0,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -89,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Column(
                       children: <Widget>[
                         Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                               color: Colors.white,
                               boxShadow: [
                                 BoxShadow(
@@ -102,9 +104,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  headerChild('Photos', 1),
+                                  /* headerChild('Photos', 1),
                                   headerChild('Followers', 0),
                                   headerChild('Following', 0),
+                                  */
+                                  Text(
+                                      'Joining Date: ${controller.userProfileData['dateOfJoining'].toDate()}')
                                 ]),
                           ),
                         ),
@@ -125,7 +130,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       color: const Color(0xFF26CBE6),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(_height / 40)),
-                                      boxShadow: [
+                                      boxShadow: const [
                                         BoxShadow(
                                             color: Colors.black87,
                                             blurRadius: 2.0,
@@ -147,7 +152,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        SharedPreferences pref =
+                                            await SharedPreferences
+                                                .getInstance();
+                                        await pref.clear();
+                                        pref.setBool(
+                                            SplashScreenState.keyLogin, false);
+
                                         _auth.signOut().then((value) => {
                                               Navigator.push(
                                                   context,

@@ -13,6 +13,7 @@ import 'package:flutter_catalog/utils/helper.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:intl/intl.dart';
 
 import '../reusable_widgets/reusable_widget.dart';
 import '../utils/color_utils.dart';
@@ -46,6 +47,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   TextEditingController _emailTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    DateTime dateOfJoining = DateTime.now();
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -160,8 +162,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                           'name': _userNameTextController.text.toString(),
                           'phone': _phoneTextController.text.toString(),
                           'email': service.getEmail(),
-                          'dateOfJoining':
-                              DateTime.now().millisecond.toString(),
+                          'dateOfJoining': dateOfJoining,
                           'image ': newUrl.toString()
                         }).then((value) {
                           Navigator.push(

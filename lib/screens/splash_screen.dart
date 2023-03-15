@@ -16,7 +16,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class SplashScreenState extends State<SplashScreen> {
-  static const String keyLogin = "login";
+  static final String keyLogin = "login";
 
   @override
   void initState() {
@@ -51,7 +51,7 @@ class SplashScreenState extends State<SplashScreen> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => SignInScreen(),
+                builder: (context) => ProfileScreen(),
               ));
         } else {
           Navigator.pushReplacement(
