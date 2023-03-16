@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_catalog/reusable_widgets/reusable_widget.dart';
@@ -73,10 +74,13 @@ class _SignInScreenState extends State<SignInScreen> {
                             email: _emailTextController.text,
                             password: _passwordTextController.text)
                         .then((value) {
+                      service.getCurrentUserEmail();
+                      print("current user email");
+                      print(service.getCurrentUserEmail());
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ProfileScreen()));
+                              builder: (context) => const ProfileScreen()));
                     });
                   } else {
                     service.error(context, "Field must not be empty");

@@ -2,9 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_catalog/utils/userModel.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
@@ -30,8 +28,10 @@ class Service extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    getEmail();
+
+    getCurrentUserEmail();
     getUserProfileData();
+    // getUserImage;
   }
 
   createUser(email, password, context) async {
@@ -39,7 +39,7 @@ class Service extends GetxController {
       await auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) => {
-                Navigator.push(context,
+                Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => UserInfoScreen()))
               });
     } on FirebaseAuthException catch (e) {
@@ -83,25 +83,58 @@ class Service extends GetxController {
     return email;
   }
 
+  String? getCurrentUserEmail() {
+    User? currentUser = auth.currentUser;
+    String? email = currentUser?.email;
+    return email;
+  }
+
   Future<void> getUserProfileData() async {
     try {
       var response = await firebaseInstance
           .collection('UserInfo')
-          .where('email', isEqualTo: getEmail())
+          .where('email', isEqualTo: getCurrentUserEmail())
           .get();
+      print(getEmail());
+      print(getCurrentUserEmail());
 
       if (response.docs.length > 0) {
         userProfileData['name'] = response.docs[0]['name'];
         userProfileData['email'] = response.docs[0]['email'];
         userProfileData['phone'] = response.docs[0]['phone'];
-        userProfileData['dateOfJoining'] = response.docs[0]['dateOfJoining'];
+        userProfileData['dateOfJoining'] =
+            response.docs[0]['dateOfJoining'].toDate();
         userProfileData['image'] = response.docs[0]['image'];
       }
-      print(userProfileData);
     } on FirebaseException catch (e) {
       print(e);
     } catch (error) {
       print(error);
     }
   }
+
+/*
+  Future<Stream<QuerySnapshot>> getUserImage() async {
+    return FirebaseFirestore.instance
+        .collection("UserInfo")
+        .where("email", isEqualTo: getCurrentUserEmail())
+        .snapshots();
+  }
+  */
+  /*
+  Future<String> get getUserImage async {
+    var collection = FirebaseFirestore.instance.collection('UserInfo');
+    var docSnapshot = await collection.doc(getCurrentUserEmail()).get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic>? data = docSnapshot.data();
+      var value = await data!['image']; // <-- The value you want to retrieve.
+      // Call setState if needed.
+      print("printing image value");
+      print(value);
+      return value;
+    } else {
+      return "No Image Found";
+    }
+  }
+  */
 }

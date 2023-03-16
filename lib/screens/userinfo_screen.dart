@@ -158,12 +158,13 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                         String? uniqueId = service.getEmail();
 
                         await fireStore.doc(uniqueId).set({
+                          'id': id,
                           'uniqueId': service.getEmail(),
                           'name': _userNameTextController.text.toString(),
                           'phone': _phoneTextController.text.toString(),
                           'email': service.getEmail(),
                           'dateOfJoining': dateOfJoining,
-                          'image ': newUrl.toString()
+                          'image': newUrl.toString(),
                         }).then((value) {
                           Navigator.push(
                               context,

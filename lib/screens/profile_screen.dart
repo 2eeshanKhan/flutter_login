@@ -1,14 +1,11 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_catalog/screens/signin_screen.dart';
 import 'package:flutter_catalog/screens/splash_screen.dart';
+
 import 'package:get/get.dart';
 import 'package:flutter_catalog/utils/helper.dart';
-import 'package:flutter_catalog/utils/userModel.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -18,9 +15,13 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
+@override
+void initState() {
+  Service().getCurrentUserEmail();
+}
+
 class _ProfileScreenState extends State<ProfileScreen> {
   final Service service = Get.put(Service());
-
   Service controller = Get.find();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -28,6 +29,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
+
     return Container(
       child: Stack(
         children: <Widget>[
@@ -50,19 +52,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          //     Image.network(
-                          //       "${controller.userProfileData['image']}"),
                           CircleAvatar(
-                              /*                     backgroundImage: new AssetImage(
-                                controller.userProfileData['image']),
+                            backgroundImage: NetworkImage(
+                                "${controller.userProfileData['image']}"),
                             radius: _height / 10,
-                            */
-                              /* backgroundImage: NetworkImage(
-                              '${controller.userProfileData['image']}',
-                            ),
-                            radius: _height / 10,
-                            */
-                              ),
+                          ),
                           SizedBox(
                             height: _height / 30,
                           ),
@@ -104,12 +98,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  /* headerChild('Photos', 1),
-                                  headerChild('Followers', 0),
-                                  headerChild('Following', 0),
-                                  */
                                   Text(
-                                      'Joining Date: ${controller.userProfileData['dateOfJoining'].toDate()}')
+                                      'Joining Date: ${controller.userProfileData['dateOfJoining']}')
                                 ]),
                           ),
                         ),
@@ -137,13 +127,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             offset: Offset(0.0, 1.0))
                                       ]),
                                   child: Center(
-                                    /*
-                                    child: Text('Signout',
-                                        style: new TextStyle(
-                                            fontSize: 12.0,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold)),
-                                            */
                                     child: ElevatedButton(
                                       child: const Text(
                                         'Logout',
